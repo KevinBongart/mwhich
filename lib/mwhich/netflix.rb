@@ -3,19 +3,22 @@ module MWhich
     class Netflix
 
       def initialize(options={})
-        @endpoint = "http://odata.netflix.com/v1/Catalog/"
+        @endpoint = "http://odata.netflix.com/v2/Catalog/"
         @format = "json"
       end
 
       def search(title)
-        results = request(title)
+        data = request(title)
 
-        titles = []
-        results['d']['results'].each do |result|
-          titles << "#{result['Type']}: #{result['Name']}#{result['Instant']['Available'] ? ' - Watch now!' : ''}"
+        results = data['d']['results'].map do |r|
+          {
+            'title' => r['Name'],
+            'url' => r['Url'],
+            'instant' => r['Instant']['Available']
+          }
         end
 
-        titles
+        results
       end
 
       protected

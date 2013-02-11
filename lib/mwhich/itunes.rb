@@ -2,38 +2,29 @@ module MWhich
   module Services
     class ITunes
       def initialize(options={})
-        @endpoint = "http://ax.phobos.apple.com.edgesuite.net/WebObjects/MZStoreServices.woa/wa/wsSearch"
+        @endpoint = "http://itunes.apple.com/search"
       end
 
-      def search(title, media="movie")
-        result = {}
-        data = request(title, media)
+      def search(title)
+        data = request(title)
 
-        result['count'] = data['results'].length
-        result['results'] = []
-
-        data['results'].each_with_index do |r, index|
-          result['results'] << {
-            'name' => r['trackName'],
-            'media_type' => media,
-            'purchase_option' => 'rent', # change this
-            'price' => r['trackPrice'],
-            'artwork_url' => r['artworkUrl100'],
-            'release_date' => r['releaseDate']
+        results = data['results'].map do |r|
+          {
+            'title' => r['trackName'],
+            'url' => r['trackViewUrl'],
+            'price' => r['trackPrice']
           }
         end
 
-        result
-
+        results
       end
 
       protected
 
-        def request(title, media="movie")
-          # We'll do searches across both TV and movies and merge the results
+        def request(title)
           results = []
 
-          url = "#{@endpoint}?term=#{URI::escape(title)}&media=#{media}"
+          url = "#{@endpoint}?term=#{URI::escape(title)}&media=movie"
           response = Net::HTTP.get_response(URI.parse(url))
           data = Yajl::Parser.parse(response.body)
 

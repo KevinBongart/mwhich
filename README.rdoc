@@ -1,10 +1,10 @@
-= MWhich 
+= MWhich
 
 Because searching Netflix, Amazon, Hulu, and iTunes sucks rocks!
 
 == INSTALLATION
 
-If you've downloaded this code from the repository or as an archive, just run 
+If you've downloaded this code from the repository or as an archive, just run
 
   rake install
 
@@ -45,7 +45,7 @@ To create a basic MWhich instance:
 Search for a movie:
 
     m.search("The Prestige")
-    # => {:amazon=>[], :hulu=>[], :itunes=>["feature-movie: The Prestige ($9.99)"], :netflix=>["Movie: The Prestige"]}
+    # => {:amazon=>[], :hulu=>[], :itunes=>[{"title"=>"The Prestige", "url"=>"https://itunes.apple.com/us/movie/the-prestige/id209960866?uo=4", "price"=>9.99}], :netflix=>[{"title"=>"The Prestige", "url"=>"http://www.netflix.com/Movie/The_Prestige/70047095", "instant"=>false}]}
 
 At this time, this merely returns a hash of key/value pairs indicating which
 services the movie or TV show was found on. The value is a simple string with
@@ -58,10 +58,10 @@ may also appear. For example:
 
 An array of services can be passed to the MWhich instance to limit the search.
 
-Only want to search Netflix and Hulu?
+Only want to search Netflix and iTunes?
 
-    m = MWhich::Client.new(:services => [:netflix, :hulu])
-    m.search("Knight Rider")
-    # => {:hulu=>["episode: I Love the Knight Life", "episode: Knight and the City", "episode: Fly By Knight", "episode: Fight Knight", "episode: Exit Light, Enter Knight", "episode: Knight to King's Pawn", "episode: Day Turns Into Knight", "episode: Don't Stop the Knight", "episode: Knight Fever", "episode: Knight of the Zodiac"], :netflix=>["Series: Knight Rider", "Series: Knight Rider"]}
+    m = MWhich::Client.new(:services => [:netflix, :itunes])
+    m.search("Lost in Translation")
+    # => {:itunes=>[{"title"=>"Lost In Translation", "url"=>"https://itunes.apple.com/us/movie/lost-in-translation/id293296135?uo=4", "price"=>9.99}, {"title"=>"Eternal Sunshine of the Spotless Mind", "url"=>"https://itunes.apple.com/us/movie/eternal-sunshine-spotless/id303440550?uo=4", "price"=>9.99}, {"title"=>"Traffic", "url"=>"https://itunes.apple.com/us/movie/traffic/id299862577?uo=4", "price"=>9.99}], :netflix=>[{"title"=>"Lost in Translation", "url"=>"http://www.netflix.com/Movie/Lost_in_Translation/60031214", "instant"=>true}]}
 
 This is obviously imperfect, but does provide an initial abstracted search.
