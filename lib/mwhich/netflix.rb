@@ -9,6 +9,7 @@ module MWhich
 
       def search(title)
         data = request(title)
+        return [] if data['error']
 
         results = data['d']['results'].map do |r|
           {
